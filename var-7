@@ -1,0 +1,57 @@
+public class lab6 {
+    public static String[] words;
+    public static boolean getLine(char w) {
+        StringBuilder sb = new StringBuilder();
+        for (String word : words) {
+            if(word.charAt(0) == word.charAt(word.length()-1)) {
+                return true;
+            }
+        }
+        return false;
+    }
+   public static void main(String[] args) throws IOException{
+        InputStream is = null;
+        Reader file = null;
+        BufferedReader buf = null;
+        OutputStream out = null;
+        Writer wr = null;
+        try {
+            is = new FileInputStream("C:\\in.txt");
+            file = new InputStreamReader(is, "cp1251");
+            buf = new BufferedReader(file);
+            File f = new File("C:\\out.txt");
+            f.createNewFile();
+            if (f.exists()) {
+                out = new FileOutputStream(f);
+                wr = new OutputStreamWriter(out, "Unicode");
+                String line = "";
+
+                int num_line = 1;
+                while ((line = buf.readLine()) != null) {
+                    wr.write(num_line);
+                    words = line.split(" ");
+                    int count = 0;
+
+                    for (int i = 0; i < words.length; i++) {
+                        if (getLine(words[i].charAt(0))) {
+                            wr.append(words[i] + " ");
+                            count++;
+                        }
+                    }
+                    wr.append(count + "\n");
+                }
+            }
+        }
+        catch (IOException ie) {
+            System.out.println("Error " + ie);
+        }
+        finally {
+            is.close();
+            wr.flush();
+            file.close();
+            wr.close();
+            buf.close();
+            out.close();
+        }
+    }
+}
